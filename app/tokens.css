@@ -1,0 +1,328 @@
+/* ─────────────────────────────────────────────
+   JobCommand — Colors & Type
+   Source of truth for all design tokens.
+   Mirrors the Tailwind v4 @theme block in
+   JobCommander/src/app/globals.css.
+   (Fonts are loaded from globals.css.)
+───────────────────────────────────────────── */
+
+:root {
+  /* ── Type families ───────────────────────── */
+  --font-display: "Syne", ui-sans-serif, system-ui, sans-serif;
+  --font-sans:    "Outfit", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* ── DARK theme (default) ────────────────── */
+
+  /* Backgrounds */
+  --bg-page:        #09090b;          /* page bg */
+  --bg-page-2:      #0a0a0c;
+  --bg-page-3:      #0f0f13;
+  --bg-sidebar:     #101014;
+  --bg-card-strong: #141417;          /* dropdowns, popovers */
+  --bg-surface:     #18181b;          /* zinc-900: panels */
+  --bg-resume:      #1c1c1f;
+  --bg-input-alt:   #1e1e24;
+
+  /* Tinted fills (translucent over dark bg) */
+  --fill-1:  rgba(255,255,255,0.01);
+  --fill-2:  rgba(255,255,255,0.02);
+  --fill-3:  rgba(255,255,255,0.03);  /* default card */
+  --fill-4:  rgba(255,255,255,0.04);  /* sidebar item hover */
+  --fill-5:  rgba(255,255,255,0.05);  /* surface hover */
+  --fill-10: rgba(255,255,255,0.10);  /* active surface */
+
+  /* Foreground / text */
+  --fg-1:    #fafafa;                 /* primary */
+  --fg-90:   rgba(255,255,255,0.90);  /* headings */
+  --fg-70:   rgba(255,255,255,0.70);  /* secondary heading */
+  --fg-60:   rgba(255,255,255,0.60);  /* body emphasis */
+  --fg-40:   rgba(255,255,255,0.40);  /* body default */
+  --fg-30:   rgba(255,255,255,0.30);  /* descriptions */
+  --fg-20:   rgba(255,255,255,0.20);  /* dimmed */
+  --fg-15:   rgba(255,255,255,0.15);  /* microcopy */
+  --fg-10:   rgba(255,255,255,0.10);  /* footer text */
+  --fg-muted:#a1a1aa;                 /* zinc-400 */
+
+  /* Borders */
+  --border-1:  rgba(255,255,255,0.04);
+  --border-2:  rgba(255,255,255,0.05);  /* card border default */
+  --border-3:  rgba(255,255,255,0.06);
+  --border-4:  rgba(255,255,255,0.08);  /* hover */
+  --border-5:  rgba(255,255,255,0.10);  /* active */
+  --border-10: rgba(255,255,255,0.20);  /* strong */
+
+  /* Brand — purple (anchor) + indigo (gradient pair) */
+  --brand-50:   #faf5ff;
+  --brand-100:  #f3e8ff;
+  --brand-300:  #d8b4fe;
+  --brand-400:  #c084fc;              /* gradient text + bloom */
+  --brand-500:  #a855f7;              /* primary brand */
+  --brand-600:  #9333ea;              /* primary hover (dark) */
+  --brand-700:  #7e22ce;              /* primary hover (light) */
+  --brand-indigo-500: #6366f1;
+  --brand-indigo-600: #4f46e5;
+  --brand-violet-400: #a78bfa;
+  --brand-violet-500: #8b5cf6;
+  --brand-blue-400:   #60a5fa;
+  --brand-pink-500:   #e879f9;
+
+  --brand-light:      rgba(168,85,247,0.15);
+  --brand-tint:       rgba(168,85,247,0.10);
+  --brand-glow:       rgba(168,85,247,0.35);
+
+  /* Semantic colors (theme-independent) */
+  --success-400:  #34d399;            /* emerald */
+  --success-500:  #10b981;
+  --success-bg:   rgba(16,185,129,0.10);
+  --success-bd:   rgba(16,185,129,0.15);
+
+  --warning-400:  #fbbf24;            /* amber */
+  --warning-500:  #f59e0b;
+  --warning-bg:   rgba(245,158,11,0.10);
+  --warning-bd:   rgba(251,191,36,0.15);
+
+  --danger-400:   #fb7185;            /* rose */
+  --danger-500:   #f43f5e;
+  --danger-bg:    rgba(244,63,94,0.10);
+  --danger-bd:    rgba(244,63,94,0.20);
+
+  --info-400:     #60a5fa;            /* blue */
+  --info-500:     #3b82f6;
+  --info-bg:      rgba(59,130,246,0.10);
+  --info-bd:      rgba(59,130,246,0.20);
+
+  --neutral-400:  #a1a1aa;            /* zinc */
+  --neutral-bg:   #27272a;
+  --neutral-bd:   rgba(255,255,255,0.05);
+
+  /* Pipeline column dots */
+  --pipe-inbox:     #3b82f6;
+  --pipe-applied:   #a855f7;
+  --pipe-interview: #10b981;
+  --pipe-offer:     #f59e0b;
+  --pipe-rejected:  #f43f5e;
+  --pipe-noanswer:  #71717a;
+
+  /* Feature accents (landing bento) */
+  --accent-import:    #60a5fa;        /* blue */
+  --accent-resume:    #a78bfa;        /* violet */
+  --accent-pipeline:  #fbbf24;        /* amber */
+  --accent-prep:      #34d399;        /* emerald */
+  --accent-cover:     #fb7185;        /* rose */
+  --accent-vault:     #22d3ee;        /* cyan */
+
+  /* Spacing (4px grid) */
+  --space-0_5: 2px;
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+  --space-16:  64px;
+  --space-20:  80px;
+  --space-28:  112px;
+  --space-32:  128px;
+
+  /* Radii */
+  --radius-sm:     4px;
+  --radius:        8px;
+  --radius-md:     12px;
+  --radius-lg:     16px;
+  --radius-xl:     24px;
+  --radius-2xl:    32px;
+  --radius-3xl:    40px;
+  --radius-4xl:    48px;            /* modal panels */
+  --radius-pill:   9999px;
+
+  /* Shadows */
+  --shadow-glow-sm:   0 0 8px  rgba(168,85,247,0.30);
+  --shadow-glow:      0 0 20px rgba(168,85,247,0.35);
+  --shadow-glow-lg:   0 0 40px rgba(168,85,247,0.20);
+  --shadow-pro:       0 0 50px rgba(139,92,246,0.08);
+  --shadow-cta:       0 0 60px rgba(255,255,255,0.15);
+  --shadow-card:      0 4px 24px rgba(0,0,0,0.40);
+  --shadow-2xl:       0 25px 50px -12px rgba(0,0,0,0.5);
+
+  /* Easings + durations */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out:    cubic-bezier(0.33, 1, 0.68, 1);
+  --dur-fast:    200ms;
+  --dur-base:    300ms;
+  --dur-slow:    500ms;
+  --dur-reveal:  900ms;
+
+  /* Type roles ─ semantic vars */
+  --h0-size: clamp(2rem, 6vw, 5rem);     /* hero display */
+  --h0-tracking: -0.04em;
+  --h1-size: clamp(1.875rem, 4vw, 3rem); /* section heading */
+  --h1-tracking: -0.02em;
+  --h2-size: 1.875rem;                   /* 30px */
+  --h3-size: 1.25rem;                    /* 20px */
+  --h4-size: 1.125rem;                   /* 18px - card title */
+  --p-size:  1rem;                        /* 16px body */
+  --small-size: 0.875rem;                 /* 14px */
+  --micro-size: 0.8125rem;                /* 13px nav/CTA */
+  --eyebrow-size: 0.6875rem;              /* 11px tracked uppercase */
+  --tag-size:    0.625rem;                /* 10px column labels */
+  --tiny-size:   0.5rem;                  /* 8px pipeline badge */
+}
+
+/* ── LIGHT theme overrides ───────────────────
+   The live app applies these on `html.light`. */
+:root.light,
+.light-theme {
+  --bg-page:        #f8f8fa;
+  --bg-page-2:      #ffffff;
+  --bg-page-3:      #ffffff;
+  --bg-sidebar:     #f0f0f5;
+  --bg-card-strong: #ffffff;
+  --bg-surface:     #ffffff;
+  --bg-resume:      #ffffff;
+  --bg-input-alt:   #f4f4f5;
+
+  --fill-1:  rgba(0,0,0,0.01);
+  --fill-2:  rgba(0,0,0,0.02);
+  --fill-3:  rgba(0,0,0,0.02);
+  --fill-4:  rgba(0,0,0,0.03);
+  --fill-5:  rgba(0,0,0,0.04);
+  --fill-10: rgba(0,0,0,0.05);
+
+  --fg-1:    #18181b;
+  --fg-90:   rgba(24,24,27,0.90);
+  --fg-70:   rgba(24,24,27,0.70);
+  --fg-60:   rgba(24,24,27,0.60);
+  --fg-40:   #71717a;
+  --fg-30:   #a1a1aa;
+  --fg-20:   #a1a1aa;
+  --fg-15:   #a1a1aa;
+  --fg-10:   #d4d4d8;
+  --fg-muted:#71717a;
+
+  --border-1:  rgba(0,0,0,0.06);
+  --border-2:  rgba(0,0,0,0.06);
+  --border-3:  rgba(0,0,0,0.08);
+  --border-4:  rgba(0,0,0,0.10);
+  --border-5:  rgba(0,0,0,0.12);
+  --border-10: rgba(0,0,0,0.15);
+
+  --brand-500: #9333ea;
+  --brand-600: #7e22ce;
+  --brand-light: rgba(147,51,234,0.10);
+
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-2xl:  0 4px 24px rgba(0,0,0,0.08);
+}
+
+/* ─────────────────────────────────────────────
+   Base type roles
+───────────────────────────────────────────── */
+body, .ds-body {
+  font-family: var(--font-sans);
+  background: var(--bg-page);
+  color: var(--fg-1);
+  -webkit-font-smoothing: antialiased;
+}
+
+.ds-display, h1.ds-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--h0-size);
+  letter-spacing: var(--h0-tracking);
+  line-height: 0.95;
+  color: var(--fg-1);
+}
+
+h1, .ds-h1 {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--h1-size);
+  letter-spacing: var(--h1-tracking);
+  line-height: 1.05;
+  color: var(--fg-1);
+}
+
+h2, .ds-h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--h2-size);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--fg-1);
+}
+
+h3, .ds-h3 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--h3-size);
+  line-height: 1.2;
+  color: var(--fg-90);
+}
+
+h4, .ds-h4 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: var(--h4-size);
+  line-height: 1.3;
+  color: var(--fg-90);
+}
+
+p, .ds-p {
+  font-family: var(--font-sans);
+  font-size: var(--p-size);
+  line-height: 1.6;
+  color: var(--fg-60);
+}
+
+.ds-small  { font-size: var(--small-size); line-height: 1.55; color: var(--fg-60); }
+.ds-micro  { font-size: var(--micro-size); font-weight: 500; color: var(--fg-40); }
+
+.ds-eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--eyebrow-size);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(192,132,252,0.70);
+}
+
+.ds-tag {
+  font-size: var(--tag-size);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fg-30);
+}
+
+/* Animated brand gradient text — used on hero accents and section words */
+.ds-gradient-text {
+  background: linear-gradient(90deg, #c084fc, #818cf8, #60a5fa, #818cf8, #c084fc);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-pan 6s ease-in-out infinite;
+}
+
+@keyframes gradient-pan {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Glassmorphism utility — matches .glass-panel in app */
+.ds-glass {
+  background: var(--fill-3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-2);
+}
+
+/* Brand gradient (logo, avatars, accents) */
+.ds-brand-gradient {
+  background-image: linear-gradient(135deg, var(--brand-500), var(--brand-indigo-600));
+}

@@ -1,0 +1,26 @@
+{
+  "name": "verdict-master",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Verdict Master — an AI decision arbiter. Two AI personas debate your dilemma round-by-round; a third agent rules with a confidence level.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.102.0",
+    "next": "^16.2.7",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}

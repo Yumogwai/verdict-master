@@ -1,0 +1,5 @@
+/* Verdict Master — global stylesheet entry point.
+   Loads webfonts (Syne display + Outfit UI), then the design tokens, then app styles. */
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800;900&display=swap");
+@import "./tokens.css";
+@import "./vm.css";
