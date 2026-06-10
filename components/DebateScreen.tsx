@@ -83,14 +83,22 @@ function Turn({
   );
 }
 
-function ThinkingBubble({ side, color }: { side: "A" | "B"; color: string }) {
+function ThinkingBubble({
+  side,
+  color,
+  icon,
+}: {
+  side: "A" | "B";
+  color: string;
+  icon: string;
+}) {
   return (
     <div
       className={"vm-thinking " + side.toLowerCase()}
       style={{ "--c": color } as CSSProperties}
     >
       <div className="vm-turn-av" style={{ background: color }}>
-        <Ic name={side === "A" ? "shield" : "rocket"} />
+        <Ic name={icon} />
       </div>
       <div className="vm-bubble">
         <span className="vm-dot" />
@@ -190,9 +198,9 @@ export function DebateScreen({
                 <span className="line" />
               </div>
               {r.a ? <Turn turn={r.a} persona={sideA} color={colorA} /> : null}
-              {showThinkA ? <ThinkingBubble side="A" color={colorA} /> : null}
+              {showThinkA ? <ThinkingBubble side="A" color={colorA} icon={sideA.icon} /> : null}
               {r.b ? <Turn turn={r.b} persona={sideB} color={colorB} /> : null}
-              {showThinkB ? <ThinkingBubble side="B" color={colorB} /> : null}
+              {showThinkB ? <ThinkingBubble side="B" color={colorB} icon={sideB.icon} /> : null}
             </div>
           );
         })}

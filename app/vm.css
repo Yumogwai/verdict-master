@@ -63,6 +63,8 @@ button { font-family: inherit; }
 
 .vm-rail-label { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-30); padding: 0 8px; margin-top: 4px; display: flex; align-items: center; gap: 8px; }
 .vm-rail-label .ct { margin-left: auto; color: var(--fg-20); letter-spacing: 0; }
+.vm-rail-clear { background: none; border: none; color: var(--fg-30); font: inherit; font-size: 9.5px; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; padding: 2px 5px; border-radius: 5px; transition: all var(--dur-fast); }
+.vm-rail-clear:hover { color: var(--danger-400); background: color-mix(in srgb, var(--danger-400) 10%, transparent); }
 
 .vm-history { flex: 1; overflow-y: auto; margin: 0 -6px; padding: 0 6px; display: flex; flex-direction: column; gap: 4px; }
 .vm-hist-empty { padding: 18px 10px; font-size: 12px; color: var(--fg-30); line-height: 1.6; }
@@ -77,6 +79,10 @@ button { font-family: inherit; }
 .vm-hist-item:hover { background: var(--fill-4); }
 .vm-hist-item.active { background: var(--brand-tint); border-color: color-mix(in srgb, var(--brand-500) 25%, transparent); }
 .vm-hist-top { display: flex; align-items: center; gap: 7px; }
+.vm-hist-del { margin-left: auto; width: 22px; height: 22px; display: grid; place-items: center; background: transparent; border: none; border-radius: 6px; color: var(--fg-30); cursor: pointer; opacity: 0; transition: all var(--dur-fast); }
+.vm-hist-item:hover .vm-hist-del, .vm-hist-item:focus-within .vm-hist-del { opacity: 1; }
+.vm-hist-del:hover { color: var(--danger-400); background: color-mix(in srgb, var(--danger-400) 12%, transparent); }
+.vm-hist-del svg { width: 13px; height: 13px; }
 .vm-hist-faces { display: flex; }
 .vm-hist-faces .f { width: 17px; height: 17px; border-radius: 5px; display: grid; place-items: center; color: #fff; }
 .vm-hist-faces .f svg { width: 10px; height: 10px; }
@@ -322,7 +328,7 @@ button { font-family: inherit; }
 .vm-detail-item .b { flex-shrink: 0; width: 18px; height: 18px; border-radius: 6px; background: var(--fill-4); display: grid; place-items: center; font-size: 10px; font-weight: 800; color: var(--fg-40); margin-top: 1px; }
 .vm-detail-item svg { width: 13px; flex-shrink: 0; margin-top: 2px; }
 
-.vm-verdict-actions { display: flex; gap: 12px; justify-content: center; margin-top: 28px; }
+.vm-verdict-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 28px; }
 .vm-saved-flag { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--success-400); font-weight: 600; }
 .vm-saved-flag svg { width: 14px; height: 14px; }
 

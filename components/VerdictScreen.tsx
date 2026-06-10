@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Debate, Leaning, Side } from "@/lib/types";
 import { JUDGE } from "@/lib/data";
+import { debateToMarkdown, exportFilename } from "@/lib/export";
 import { Ic } from "./Icon";
 
 function LeanPill({
@@ -87,15 +88,48 @@ export function VerdictScreen({
   saved,
   onBack,
   onNew,
+  onRematch,
 }: {
   debate: Debate;
   saved: boolean;
   onBack: () => void;
   onNew: () => void;
+  onRematch: () => void;
 }) {
   const v = debate.verdict!;
   const [ringVal, setRingVal] = useState(0);
   const [countVal, setCountVal] = useState(0);
+  const [copied, setCopied] = useState(false);
+  const copiedTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (copiedTimer.current) clearTimeout(copiedTimer.current);
+    };
+  }, []);
+
+  async function copyMarkdown() {
+    try {
+      await navigator.clipboard.writeText(debateToMarkdown(debate));
+      setCopied(true);
+      if (copiedTimer.current) clearTimeout(copiedTimer.current);
+      copiedTimer.current = setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* clipboard unavailable (insecure context) — the download path still works */
+    }
+  }
+
+  function downloadMarkdown() {
+    const blob = new Blob([debateToMarkdown(debate)], {
+      type: "text/markdown;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = exportFilename(debate);
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
   useEffect(() => {
     // ring fills via inline --val; count-up via setInterval (fires even when rAF is throttled)
@@ -179,6 +213,33 @@ export function VerdictScreen({
             <Ic name="check" /> Saved to history
           </span>
         ) : null}
+        <button
+          className="vm-btn-secondary"
+          onClick={copyMarkdown}
+          title="Copy the full debate + verdict as Markdown"
+        >
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
+            <Ic name={copied ? "check" : "copy"} style={{ width: 14, height: 14 }} />
+            {copied ? "Copied" : "Copy result"}
+          </span>
+        </button>
+        <button
+          className="vm-btn-secondary"
+          onClick={downloadMarkdown}
+          title="Download as a .md file"
+          aria-label="Download as Markdown"
+        >
+          <Ic name="download" style={{ width: 14, height: 14 }} />
+        </button>
+        <button
+          className="vm-btn-secondary"
+          onClick={onRematch}
+          title="Rerun this dilemma with the two voices arguing the opposite cases"
+        >
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
+            <Ic name="swap" style={{ width: 14, height: 14 }} /> Rematch · swap sides
+          </span>
+        </button>
         <button className="vm-btn-secondary" onClick={onBack}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
             <Ic name="swords" style={{ width: 14, height: 14 }} /> Reread the debate

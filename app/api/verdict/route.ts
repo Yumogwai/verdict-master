@@ -1,22 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
-import { generate } from "@/lib/anthropic";
+import { generate, describeGenerationError } from "@/lib/anthropic";
 import { buildVerdictPrompt, parseVerdict } from "@/lib/debate-prompts";
-import type { VerdictRequest } from "@/lib/types";
+import { parseVerdictRequest } from "@/lib/validate";
+import { rateLimit, clientId } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
-  let body: VerdictRequest;
+  const limit = rateLimit(clientId(req));
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "Easy there — too many debates at once. Try again in ~" + limit.retryAfterSec + "s." },
+      { status: 429, headers: { "retry-after": String(limit.retryAfterSec) } }
+    );
+  }
+
+  let raw: unknown;
   try {
-    body = (await req.json()) as VerdictRequest;
+    raw = await req.json();
   } catch {
     return NextResponse.json({ error: "Invalid request body." }, { status: 400 });
   }
 
-  if (!body?.topic || !body?.sideA || !body?.sideB) {
+  const body = parseVerdictRequest(raw);
+  if (!body) {
     return NextResponse.json(
-      { error: "Missing topic or debaters." },
+      { error: "Missing or invalid topic, debaters, or debate transcript." },
       { status: 400 }
     );
   }
@@ -26,8 +36,10 @@ export async function POST(req: NextRequest) {
     const verdict = await generate(buildVerdictPrompt(body), parseVerdict, 2, 1400);
     return NextResponse.json(verdict);
   } catch (err) {
-    const message =
-      err instanceof Error ? err.message : "The verdict could not be generated.";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const { status, message } = describeGenerationError(
+      err,
+      "The verdict could not be generated."
+    );
+    return NextResponse.json({ error: message }, { status });
   }
 }

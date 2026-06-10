@@ -119,6 +119,7 @@ export function InputScreen({
           <textarea
             ref={taRef}
             value={topic}
+            maxLength={800}
             placeholder="Type the dilemma in your own words… the messier and more specific, the better."
             onChange={(e) => setTopic(e.target.value)}
             onKeyDown={(e) => {

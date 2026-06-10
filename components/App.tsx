@@ -62,6 +62,21 @@ function persistHistory(list: Debate[]) {
   }
 }
 
+/** Shape-check a persisted debate so corrupted storage can't crash the UI. */
+function isSavedDebate(d: unknown): d is Debate {
+  if (!d || typeof d !== "object") return false;
+  const x = d as Record<string, any>;
+  return (
+    typeof x.id === "string" &&
+    typeof x.topic === "string" &&
+    !!x.sideA &&
+    typeof x.sideA.name === "string" &&
+    !!x.sideB &&
+    typeof x.sideB.name === "string" &&
+    Array.isArray(x.rounds)
+  );
+}
+
 function liveFromDebate(debate: Debate): LiveState {
   const turns: Turn[] = [];
   (debate.rounds || []).forEach((r) => {
@@ -75,10 +90,12 @@ function HistoryItem({
   debate,
   active,
   onClick,
+  onDelete,
 }: {
   debate: Debate;
   active: boolean;
   onClick: () => void;
+  onDelete?: () => void;
 }) {
   const v = debate.verdict;
   let leanColor = "var(--brand-400)";
@@ -91,9 +108,17 @@ function HistoryItem({
     leanTxt = "Bold";
   }
   return (
-    <button
+    <div
       className={"vm-hist-item" + (active ? " active" : "")}
+      role="button"
+      tabIndex={0}
       onClick={onClick}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onClick();
+        }
+      }}
     >
       <div className="vm-hist-top">
         <div className="vm-hist-faces">
@@ -104,6 +129,19 @@ function HistoryItem({
             <Ic name={debate.sideB.icon} />
           </span>
         </div>
+        {onDelete ? (
+          <button
+            className="vm-hist-del"
+            title="Delete this debate"
+            aria-label="Delete this debate"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+          >
+            <Ic name="trash" />
+          </button>
+        ) : null}
       </div>
       <div className="q">{debate.topic}</div>
       <div className="vm-hist-meta">
@@ -115,7 +153,7 @@ function HistoryItem({
           {debate.sample ? "Example" : timeAgo(debate.createdAt)}
         </span>
       </div>
-    </button>
+    </div>
   );
 }
 
@@ -148,7 +186,10 @@ export function App() {
     }
     try {
       const raw = localStorage.getItem(VM_STORE_KEY);
-      if (raw) setUserHistory(JSON.parse(raw));
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) setUserHistory(parsed.filter(isSavedDebate));
+      }
     } catch {
       /* ignore */
     }
@@ -291,6 +332,37 @@ export function App() {
     if (current) runDebate(current);
   }
 
+  function deleteDebate(id: string) {
+    setUserHistory((prev) => {
+      const next = prev.filter((d) => d.id !== id);
+      persistHistory(next);
+      return next;
+    });
+    if (current && current.id === id) newDebate();
+  }
+
+  function clearHistory() {
+    if (!window.confirm("Delete all saved debates? The two examples stay.")) return;
+    const wasOpen = current && !current.sample;
+    setUserHistory([]);
+    persistHistory([]);
+    if (wasOpen) newDebate();
+  }
+
+  /** Same dilemma, opposite casting: each voice now argues the other case. */
+  function rematch(debate: Debate) {
+    runDebate({
+      id: "d-" + Date.now(),
+      createdAt: Date.now(),
+      topic: debate.topic,
+      sideA: debate.sideB,
+      sideB: debate.sideA,
+      rounds: [],
+      verdict: null,
+      status: "debating",
+    });
+  }
+
   // ── render the active screen ──
   let screen: React.ReactNode = null;
   if (view === "input") {
@@ -339,12 +411,14 @@ export function App() {
       );
     }
   } else if (view === "verdict" && current && current.verdict) {
+    const debate = current;
     screen = (
       <VerdictScreen
-        debate={current}
-        saved
+        debate={debate}
+        saved={!debate.sample}
         onBack={() => setView("debate")}
         onNew={newDebate}
+        onRematch={() => rematch(debate)}
       />
     );
   }
@@ -370,7 +444,17 @@ export function App() {
           <Ic name="plus" /> New debate
         </button>
         <div className="vm-rail-label">
-          History <span className="ct">{allHistory.length}</span>
+          History
+          {userHistory.length > 0 ? (
+            <button
+              className="vm-rail-clear"
+              onClick={clearHistory}
+              title="Delete all saved debates"
+            >
+              Clear
+            </button>
+          ) : null}
+          <span className="ct">{allHistory.length}</span>
         </div>
         <div className="vm-history">
           {allHistory.length === 0 ? (
@@ -384,6 +468,7 @@ export function App() {
                 debate={d}
                 active={!!current && current.id === d.id}
                 onClick={() => openHistory(d)}
+                onDelete={d.sample ? undefined : () => deleteDebate(d.id)}
               />
             ))
           )}
