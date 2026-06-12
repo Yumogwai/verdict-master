@@ -1,16 +1,10 @@
 "use client";
 
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { Debate, LiveState, Round, Side, Turn, Verdict } from "@/lib/types";
 import {
   SAMPLE_HISTORY,
-  ROUND_LABELS,
+  roundLabel,
   personaById,
 } from "@/lib/data";
 import { generateRound, generateVerdict } from "@/lib/debate-api";
@@ -83,7 +77,14 @@ function liveFromDebate(debate: Debate): LiveState {
     turns.push({ round: r.n, label: r.label, side: "A", text: r.a.text, reactsTo: r.a.reactsTo || "" });
     turns.push({ round: r.n, label: r.label, side: "B", text: r.b.text, reactsTo: r.b.reactsTo || "" });
   });
-  return { turns, thinkingRound: 0, thinkingSide: null, phase: "done", error: null };
+  return {
+    turns,
+    thinkingRound: 0,
+    thinkingSide: null,
+    totalRounds: (debate.rounds || []).length,
+    phase: "done",
+    error: null,
+  };
 }
 
 function HistoryItem({
@@ -168,6 +169,7 @@ export function App() {
     turns: [],
     thinkingRound: 0,
     thinkingSide: null,
+    totalRounds: 0,
     phase: "idle",
     error: null,
   });
@@ -241,13 +243,20 @@ export function App() {
     setCurrent(debate);
     setView("debate");
     setRailOpen(false);
-    setLive({ turns: [], thinkingRound: 1, thinkingSide: "A", phase: "debating", error: null });
+    setLive({
+      turns: [],
+      thinkingRound: 1,
+      thinkingSide: "A",
+      totalRounds: total,
+      phase: "debating",
+      error: null,
+    });
 
     const history: Round[] = [];
     const turns: Turn[] = [];
     try {
       for (let n = 1; n <= total; n++) {
-        const label = ROUND_LABELS[n - 1] || "Round " + n;
+        const label = roundLabel(n, total);
         if (stale()) return;
         setLive((L) => ({ ...L, phase: "debating", thinkingRound: n, thinkingSide: "A" }));
         const round = await generateRound({
@@ -315,7 +324,14 @@ export function App() {
   function newDebate() {
     runIdRef.current++;
     setCurrent(null);
-    setLive({ turns: [], thinkingRound: 0, thinkingSide: null, phase: "idle", error: null });
+    setLive({
+      turns: [],
+      thinkingRound: 0,
+      thinkingSide: null,
+      totalRounds: 0,
+      phase: "idle",
+      error: null,
+    });
     setView("input");
     setRailOpen(false);
   }
@@ -343,10 +359,12 @@ export function App() {
 
   function clearHistory() {
     if (!window.confirm("Delete all saved debates? The two examples stay.")) return;
-    const wasOpen = current && !current.sample;
     setUserHistory([]);
     persistHistory([]);
-    if (wasOpen) newDebate();
+    // Reset the stage only when it shows a now-deleted saved debate — never
+    // interrupt a debate that is still being generated (it isn't saved yet).
+    const running = live.phase === "debating" || live.phase === "judging";
+    if (current && !current.sample && !running) newDebate();
   }
 
   /** Same dilemma, opposite casting: each voice now argues the other case. */
@@ -388,8 +406,8 @@ export function App() {
           </div>
           <h3>The debate stalled</h3>
           <p>
-            {live.error} The AI advisors couldn’t be reached, or the response came
-            back malformed.
+            {live.error ||
+              "The AI advisors couldn’t be reached, or the response came back malformed."}
           </p>
           <div style={{ display: "flex", gap: 10 }}>
             <button className="vm-btn-secondary" onClick={newDebate}>

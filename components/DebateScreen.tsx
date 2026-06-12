@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Debate, LiveState, Side, Turn as TurnT } from "@/lib/types";
-import { ROUND_LABELS } from "@/lib/data";
+import { roundLabel } from "@/lib/data";
 import { Ic } from "./Icon";
 import { Avatar } from "./Avatar";
 
@@ -151,11 +151,15 @@ export function DebateScreen({
     b?: TurnT;
   }[] = [];
   for (let n = 1; n <= maxRound; n++) {
+    const a = turns.find((t) => t.round === n && t.side === "A");
+    const b = turns.find((t) => t.round === n && t.side === "B");
     rounds.push({
       n,
-      label: ROUND_LABELS[n - 1] || "Round " + n,
-      a: turns.find((t) => t.round === n && t.side === "A"),
-      b: turns.find((t) => t.round === n && t.side === "B"),
+      // Generated turns carry their label; the still-thinking round derives
+      // its own from the debate length.
+      label: a?.label || b?.label || roundLabel(n, live.totalRounds || maxRound),
+      a,
+      b,
     });
   }
 

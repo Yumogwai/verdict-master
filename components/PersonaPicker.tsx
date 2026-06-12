@@ -101,13 +101,9 @@ export function PersonaPicker({
                 <button
                   key={p.id}
                   className={"vm-pcard" + (selected ? " sel" : "")}
-                  style={
-                    {
-                      "--pc": p.hue,
-                      opacity: disabled ? 0.32 : 1,
-                      pointerEvents: disabled ? "none" : "auto",
-                    } as CSSProperties
-                  }
+                  style={{ "--pc": p.hue } as CSSProperties}
+                  disabled={disabled}
+                  title={disabled ? "Already arguing the other side" : undefined}
                   onClick={() => setSel({ type: "preset", id: p.id })}
                 >
                   <div className="vm-pcard-av" style={{ background: p.hue }}>
@@ -146,6 +142,7 @@ export function PersonaPicker({
               className="vm-input"
               placeholder="Name — e.g. My inner critic, Future me, A trusted mentor"
               value={customName}
+              maxLength={80}
               onChange={(e) => {
                 setCustomName(e.target.value);
                 setSel({ type: "custom" });
@@ -155,6 +152,7 @@ export function PersonaPicker({
               className="vm-input"
               placeholder="How does it think? e.g. ruthlessly weighs money and time, no sentimentality"
               value={customStance}
+              maxLength={300}
               onChange={(e) => {
                 setCustomStance(e.target.value);
                 setSel({ type: "custom" });

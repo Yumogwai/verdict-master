@@ -73,6 +73,7 @@ export interface LiveState {
   turns: Turn[];
   thinkingRound: number;
   thinkingSide: "A" | "B" | null;
+  totalRounds: number;
   phase: Phase;
   error: string | null;
 }

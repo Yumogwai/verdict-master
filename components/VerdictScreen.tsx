@@ -168,6 +168,11 @@ export function VerdictScreen({
           </div>
         </div>
 
+        <div className="vm-verdict-topic">
+          <span className="k">Ruling on</span>
+          &ldquo;{debate.topic}&rdquo;
+        </div>
+
         <div className="vm-verdict-grid">
           <div className="vm-verdict-decision">
             <LeanPill leaning={v.leaning} sideA={debate.sideA} sideB={debate.sideB} />

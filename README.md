@@ -88,10 +88,25 @@ One‑click deploy on Vercel (set `ANTHROPIC_API_KEY` when prompted):
 ### Scripts
 
 ```bash
-npm run dev     # start the dev server
-npm run build   # production build
-npm start       # serve the production build
+npm run dev        # start the dev server
+npm run build      # production build
+npm start          # serve the production build
+npm test           # unit tests (Node's built-in runner via tsx)
+npm run typecheck  # strict TypeScript check
 ```
+
+### Tests
+
+The pure core — request validation, prompt construction, model-output parsing,
+Markdown export, the rate limiter, and the static data — is covered by a unit
+suite that runs on Node's built-in test runner (no test framework dependency):
+
+```bash
+npm test
+```
+
+CI runs the typecheck, the test suite, and a production build on every pull
+request and every push to `main`.
 
 ---
 
@@ -99,7 +114,7 @@ npm start       # serve the production build
 
 - **The API key lives server‑side only.** The browser talks to `app/api/*` route handlers; the Anthropic SDK runs exclusively in them. No key material is ever bundled client‑side.
 - **Every generation route is rate‑limited** (sliding window per client IP) so a shared demo URL can't be used to drain the key.
-- **All client‑supplied input is validated and length‑capped on the server** — topic, persona names, custom stances, and the round transcript — before it can reach a prompt. Oversized or malformed payloads get a clean `400`, never a crash or an inflated token bill.
+- **All client‑supplied input is validated and length‑capped on the server** — topic, persona names, custom stances, and the round transcript — before it can reach a prompt. Oversized or malformed payloads get a clean `400`, never a crash or an inflated token bill. The validation layer is unit‑tested.
 - **Errors are mapped, not leaked.** Anthropic SDK errors are translated into friendly, actionable messages (bad key vs. overloaded service vs. malformed output) using typed error classes.
 - **No accounts, no tracking, no server‑side storage.** Debate history lives in the visitor's `localStorage` and nowhere else.
 - `.env*` files are git‑ignored; `.env.example` ships placeholders only.
@@ -137,6 +152,7 @@ lib/
   rate-limit.ts         # per-IP sliding-window rate limiter
   export.ts             # debate → Markdown export (pure)
   debate-api.ts         # client fetch wrappers for the API routes
+tests/                  # unit suite for the pure core (node:test + tsx)
 ```
 
 ---

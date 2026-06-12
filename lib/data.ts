@@ -84,13 +84,17 @@ export const JUDGE = {
     "Hears both sides, weighs the evidence, and rules with a confidence level — not a coin flip.",
 };
 
-export const ROUND_LABELS = [
-  "Opening statements",
-  "Rebuttal",
-  "Closing arguments",
-  "Final exchange",
-  "Last word",
-];
+/**
+ * Label a round by its position in the debate, so the last round is always
+ * "Closing arguments" — matching the prompt guidance, which treats the final
+ * round as the close whether the debate runs 2, 3 or 4 rounds.
+ */
+export function roundLabel(n: number, total: number): string {
+  if (n <= 1) return "Opening statements";
+  if (n >= total) return "Closing arguments";
+  if (total >= 4 && n === total - 1) return "Crossfire";
+  return "Rebuttal";
+}
 
 export function personaById(id: string): Persona | null {
   return PERSONAS.find((p) => p.id === id) || null;

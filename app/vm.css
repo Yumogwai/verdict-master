@@ -196,7 +196,8 @@ button { font-family: inherit; }
   border-radius: var(--radius-lg); cursor: pointer;
   transition: all var(--dur-fast) var(--ease-out);
 }
-.vm-pcard:hover { background: var(--fill-5); border-color: var(--border-5); transform: translateY(-1px); }
+.vm-pcard:hover:not(:disabled) { background: var(--fill-5); border-color: var(--border-5); transform: translateY(-1px); }
+.vm-pcard:disabled { opacity: 0.32; cursor: not-allowed; }
 .vm-pcard.sel { border-color: color-mix(in srgb, var(--pc) 55%, transparent); background: color-mix(in srgb, var(--pc) 9%, var(--fill-3)); }
 .vm-pcard-av { width: 42px; height: 42px; border-radius: 12px; flex-shrink: 0; display: grid; place-items: center; color: #fff; box-shadow: 0 0 16px color-mix(in srgb, var(--pc) 35%, transparent); }
 .vm-pcard-av svg { width: 21px; height: 21px; }
@@ -299,7 +300,9 @@ button { font-family: inherit; }
   padding: 36px; box-shadow: var(--shadow-glow-lg); margin-bottom: 16px;
 }
 .vm-verdict-hero::before { content: ""; position: absolute; top: -1px; left: 36px; right: 36px; height: 2px; background: linear-gradient(90deg, transparent, var(--brand-500), var(--brand-indigo-500), transparent); }
-.vm-judge-row { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; }
+.vm-judge-row { display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.vm-verdict-topic { margin: 0 0 22px; font-size: 13.5px; line-height: 1.6; color: var(--fg-60); font-style: italic; max-width: 72ch; }
+.vm-verdict-topic .k { display: block; font-style: normal; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-30); margin-bottom: 5px; }
 .vm-judge-av { width: 44px; height: 44px; border-radius: 13px; background: linear-gradient(135deg, var(--brand-500), var(--brand-indigo-600)); display: grid; place-items: center; color: #fff; box-shadow: var(--shadow-glow-sm); }
 .vm-judge-av svg { width: 22px; height: 22px; }
 .vm-judge-row .jm .nm { font-family: var(--font-display); font-weight: 800; font-size: 15px; letter-spacing: -0.01em; }

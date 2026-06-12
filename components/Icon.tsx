@@ -10,7 +10,9 @@ export function Ic({
   className?: string;
   style?: CSSProperties;
 }) {
-  const inner = ICONS[name] || "";
+  // Own-property check so a hostile `name` (e.g. "constructor") from persisted
+  // state can never resolve through the prototype chain into the markup.
+  const inner = Object.prototype.hasOwnProperty.call(ICONS, name) ? ICONS[name] : "";
   return (
     <svg
       viewBox="0 0 24 24"
