@@ -29,6 +29,14 @@ test("personas have unique ids and resolvable icons", () => {
   assert.ok(ICONS[JUDGE.icon]);
 });
 
+test("UI-critical icons are all present in the icon set", () => {
+  // Referenced directly in the chrome/actions, not via persona data — a removal
+  // would otherwise render a silently-empty <svg>.
+  for (const name of ["scale", "gavel", "swords", "plus", "play", "swap", "copy", "download", "trash", "alert", "arrowLeft", "arrowRight", "check"]) {
+    assert.ok(ICONS[name], "icon '" + name + "' must exist in ICONS");
+  }
+});
+
 test("personaById finds presets and rejects unknowns", () => {
   assert.equal(personaById("skeptic")?.name, "The Skeptic");
   assert.equal(personaById("nope"), null);

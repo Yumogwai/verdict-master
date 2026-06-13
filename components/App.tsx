@@ -306,6 +306,59 @@ export function App() {
     }
   }
 
+  /**
+   * Re-run the staged reveal from a debate that's already been argued — no API
+   * calls, no key. Lets a visitor (or the owner showing off a portfolio piece)
+   * watch a finished debate unfold live instead of only reading the result.
+   */
+  async function replayDebate(debate: Debate) {
+    const myId = ++runIdRef.current;
+    const pace = Number(settings.pace) || 1;
+    const sleep = (ms: number) => new Promise((res) => setTimeout(res, ms));
+    const stale = () => myId !== runIdRef.current;
+    const rounds = debate.rounds || [];
+    if (!rounds.length || !debate.verdict) {
+      // Nothing to replay — just show it statically.
+      openHistory(debate);
+      return;
+    }
+
+    setCurrent(debate);
+    setView("debate");
+    setRailOpen(false);
+    setLive({
+      turns: [],
+      thinkingRound: 1,
+      thinkingSide: "A",
+      totalRounds: rounds.length,
+      phase: "debating",
+      error: null,
+    });
+
+    const turns: Turn[] = [];
+    for (const r of rounds) {
+      if (stale()) return;
+      setLive((L) => ({ ...L, phase: "debating", thinkingRound: r.n, thinkingSide: "A" }));
+      await sleep(720 * pace);
+      if (stale()) return;
+      turns.push({ round: r.n, label: r.label, side: "A", text: r.a.text, reactsTo: r.a.reactsTo });
+      setLive((L) => ({ ...L, turns: turns.slice(), thinkingSide: null }));
+      await sleep(820 * pace);
+      if (stale()) return;
+      setLive((L) => ({ ...L, thinkingRound: r.n, thinkingSide: "B" }));
+      await sleep(660 * pace);
+      if (stale()) return;
+      turns.push({ round: r.n, label: r.label, side: "B", text: r.b.text, reactsTo: r.b.reactsTo });
+      setLive((L) => ({ ...L, turns: turns.slice(), thinkingSide: null }));
+      await sleep(780 * pace);
+    }
+    if (stale()) return;
+    setLive((L) => ({ ...L, phase: "judging", thinkingSide: null }));
+    await sleep(1150 * pace);
+    if (stale()) return;
+    setLive((L) => ({ ...L, phase: "ready" }));
+  }
+
   function startDebate() {
     if (!topic.trim() || !sideA || !sideB) return;
     const debate: Debate = {
@@ -395,6 +448,11 @@ export function App() {
           else setSideB(p);
         }}
         onRun={startDebate}
+        onWatchSample={
+          SAMPLE_HISTORY.length
+            ? () => replayDebate(SAMPLE_HISTORY[0])
+            : undefined
+        }
       />
     );
   } else if (view === "debate") {
@@ -437,6 +495,7 @@ export function App() {
         onBack={() => setView("debate")}
         onNew={newDebate}
         onRematch={() => rematch(debate)}
+        onReplay={() => replayDebate(debate)}
       />
     );
   }

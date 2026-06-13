@@ -170,6 +170,15 @@ button { font-family: inherit; }
 .vm-run:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
 .vm-run svg { width: 19px; height: 19px; }
 .vm-run-hint { text-align: center; font-size: 12px; color: var(--fg-30); margin-top: -14px; }
+.vm-watch-sample {
+  align-self: center; display: inline-flex; align-items: center; gap: 8px;
+  margin-top: -8px; padding: 9px 16px;
+  background: transparent; border: 1px solid var(--border-3); border-radius: var(--radius-pill);
+  color: var(--fg-40); font-family: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+.vm-watch-sample:hover { color: var(--fg-90); border-color: color-mix(in srgb, var(--brand-500) 40%, transparent); background: var(--brand-tint); }
+.vm-watch-sample svg { width: 12px; height: 12px; color: var(--brand-400); }
 
 /* ── Persona picker modal ───────────────────── */
 .vm-overlay { position: fixed; inset: 0; z-index: 100; background: rgba(5,5,8,0.66); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 28px; animation: vm-fade var(--dur-base) var(--ease-out); }

@@ -78,6 +78,7 @@ export function InputScreen({
   sideB,
   onSetSide,
   onRun,
+  onWatchSample,
 }: {
   topic: string;
   setTopic: (t: string) => void;
@@ -85,6 +86,7 @@ export function InputScreen({
   sideB: Side | null;
   onSetSide: (side: "A" | "B", persona: Side) => void;
   onRun: () => void;
+  onWatchSample?: () => void;
 }) {
   const [picker, setPicker] = useState<"A" | "B" | null>(null);
   const taRef = useRef<HTMLTextAreaElement>(null);
@@ -150,6 +152,17 @@ export function InputScreen({
         <div className="vm-run-hint">
           Two agents debate live · a third delivers the verdict · ⌘↵ to run
         </div>
+
+        {onWatchSample ? (
+          <button
+            type="button"
+            className="vm-watch-sample"
+            onClick={onWatchSample}
+            title="Watch a worked example play out live — no API key needed"
+          >
+            <Ic name="play" /> No key yet? Watch a sample debate unfold
+          </button>
+        ) : null}
       </div>
 
       {picker && (

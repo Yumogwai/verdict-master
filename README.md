@@ -27,6 +27,7 @@ Built with **Next.js (App Router) + TypeScript** and the **Anthropic API**. Dark
 - **Live, staggered debate** — rounds unfold down a central spine: cautious **Side A** (left) vs bold **Side B** (right). Each round is generated *with full prior context*, so the sides actually counter each other — complete with "↳ responding to…" tags and thinking‑dot beats for real debate tension.
 - **The verdict payoff** — The Arbiter's ruling, a conic confidence ring, a lean pill, a summary, and three cards: *what it hinged on · main risks · what would change it*.
 - **Rematch with swapped sides** — one click reruns the same dilemma with the two voices arguing the *opposite* cases. Watching the framing flip is half the fun — and a good BS-detector for the verdict.
+- **Replay / no‑key demo** — replay any finished debate through the full live, staged reveal with **zero API calls**. The input screen offers "Watch a sample debate unfold" so a first‑time visitor (or a deployed portfolio link with no shared key) sees the marquee experience immediately.
 - **Export** — copy the full debate + verdict as Markdown, or download it as a `.md` file.
 - **History** — every debate is saved to `localStorage` and reopenable from the left rail; individual delete + clear-all; seeded with two worked examples so the app is explorable immediately.
 - **Tweaks** — a settings panel to recolor the two sides, set round count (2–4), adjust pacing, and toggle light/dark. Persisted locally.

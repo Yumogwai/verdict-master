@@ -89,12 +89,14 @@ export function VerdictScreen({
   onBack,
   onNew,
   onRematch,
+  onReplay,
 }: {
   debate: Debate;
   saved: boolean;
   onBack: () => void;
   onNew: () => void;
   onRematch: () => void;
+  onReplay?: () => void;
 }) {
   const v = debate.verdict!;
   const [ringVal, setRingVal] = useState(0);
@@ -245,6 +247,17 @@ export function VerdictScreen({
             <Ic name="swap" style={{ width: 14, height: 14 }} /> Rematch · swap sides
           </span>
         </button>
+        {onReplay ? (
+          <button
+            className="vm-btn-secondary"
+            onClick={onReplay}
+            title="Watch this debate play out live again — no API call"
+          >
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
+              <Ic name="play" style={{ width: 13, height: 13 }} /> Replay
+            </span>
+          </button>
+        ) : null}
         <button className="vm-btn-secondary" onClick={onBack}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 7 }}>
             <Ic name="swords" style={{ width: 14, height: 14 }} /> Reread the debate
